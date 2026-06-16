@@ -92,14 +92,6 @@ Total runtime (ms): 5063
 - Backend performance measurement
 - Modular system design
 
----Build & Run
-```bash
-mkdir build
-cd build
-cmake ..
-make
-./RemotePatientMonitoring
-
 --Performance
 Processes ~2000 simulated patient records
 Achieves ~390–400 records/sec throughput
