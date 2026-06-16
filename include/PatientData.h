@@ -1,15 +1,10 @@
-#ifndef PATIENT_DATA_H
-#define PATIENT_DATA_H
-
+#pragma once
 struct PatientData
 {
     int patientId;
-
     int heartRate;
-
     int spo2;
-
     float temperature;
+    
+    bool isEnd = false;
 };
-
-#endif

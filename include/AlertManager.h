@@ -1,5 +1,4 @@
-#ifndef ALERT_MANAGER_H
-#define ALERT_MANAGER_H
+#pragma once
 
 #include "PatientData.h"
 
@@ -8,5 +7,3 @@ class AlertManager
 public:
     void sendAlert(const PatientData& data);
 };
-
-#endif

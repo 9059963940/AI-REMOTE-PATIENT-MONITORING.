@@ -6,12 +6,18 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(include)
 
-add_executable(
-    RemotePatientMonitoring
+find_package(Threads REQUIRED)
 
+add_executable(RemotePatientMonitoring
     src/main.cpp
     src/DataGenerator.cpp
-    src/AnomalyDetector.cpp
+    src/ZScoreDetector.cpp
     src/AlertManager.cpp
-    src/Dashboard.cpp
+    src/PerformanceMonitor.cpp
+    src/CsvLoader.cpp
+    src/Metrics.cpp
+)
+
+target_link_libraries(RemotePatientMonitoring
+    Threads::Threads
 )

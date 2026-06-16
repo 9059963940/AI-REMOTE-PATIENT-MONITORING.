@@ -1,33 +1,75 @@
 #include "../include/DataGenerator.h"
-#include "../include/AnomalyDetector.h"
+#include "../include/ThreadSafeQueue.h"
+#include "../include/ZScoreDetector.h"
 #include "../include/AlertManager.h"
-#include "../include/Dashboard.h"
+#include "../include/Metrics.h"
 
 #include <thread>
-#include <chrono>
+#include <iostream>
 
-int main()
+ThreadSafeQueue<PatientData> queue;
+Metrics metrics;
+
+void producer()
 {
-    DataGenerator generator;
-    AnomalyDetector detector;
-    AlertManager alert;
-    Dashboard dashboard;
+    DataGenerator gen;
 
-    for(int i=1;i<=1000;i++)
+    for (int i = 0; i < 2000; i++)
     {
-        PatientData data =
-            generator.generate(i);
+        queue.push(gen.generate(i));
 
-        dashboard.display(data);
+        std::this_thread::sleep_for(
+            std::chrono::milliseconds(2));
+    }
+}
 
-        if(detector.detect(data))
+void consumer()
+{
+    ZScoreDetector detector;
+    AlertManager alert;
+
+    for (int i = 0; i < 2000; i++)
+    {
+        PatientData data = queue.pop();
+
+        metrics.increment();
+
+        if (detector.detect(data))
         {
             alert.sendAlert(data);
         }
-
-        std::this_thread::sleep_for(
-            std::chrono::milliseconds(50));
     }
+}
+
+int main()
+{
+    auto start = std::chrono::high_resolution_clock::now();
+
+    std::thread t1(producer);
+    std::thread t2(consumer);
+
+    t1.join();
+    t2.join();
+
+    auto end = std::chrono::high_resolution_clock::now();
+
+    auto duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            end - start).count();
+
+    std::cout << "\n===== SYSTEM REPORT =====\n";
+
+    std::cout << "Processed: "
+              << metrics.getProcessed()
+              << "\n";
+
+    std::cout << "Throughput (items/sec): "
+              << metrics.throughput()
+              << "\n";
+
+    std::cout << "Total runtime (ms): "
+              << duration
+              << "\n";
 
     return 0;
 }
