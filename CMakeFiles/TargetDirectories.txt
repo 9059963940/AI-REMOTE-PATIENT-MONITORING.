@@ -1,0 +1,3 @@
+/Users/deepu/Desktop/AI-Remote-Patient-Monitoring/AI-Remote-Patient-Monitoring/build/CMakeFiles/RemotePatientMonitoring.dir
+/Users/deepu/Desktop/AI-Remote-Patient-Monitoring/AI-Remote-Patient-Monitoring/build/CMakeFiles/edit_cache.dir
+/Users/deepu/Desktop/AI-Remote-Patient-Monitoring/AI-Remote-Patient-Monitoring/build/CMakeFiles/rebuild_cache.dir
